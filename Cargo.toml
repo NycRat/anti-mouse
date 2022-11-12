@@ -1,0 +1,10 @@
+[package]
+name = "anti-mouse"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+mouse-rs = "0.4"
+readkey = "0.2.1"
