@@ -128,8 +128,6 @@ fn main() {
         basic_motions(&mouse, &mut mouse_pos, &delta_time, &mut count);
         mouse_clicks(&mouse, &mut left_pressed, &mut right_pressed);
 
-        println!("{:?}", mouse_pos);
-
         let now = std::time::Instant::now();
         delta_time = (now - last_tick).as_secs_f64();
 
