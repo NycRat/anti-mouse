@@ -1,5 +1,8 @@
-use mouse_rs::{types::Point, Mouse};
+use crate::vec2::Vec2;
+use mouse_rs::Mouse;
 use readkey::Keycode;
+
+pub mod vec2;
 
 fn set_count(count: &mut i32) {
     if Keycode::_0.is_pressed() {
@@ -37,23 +40,31 @@ fn set_count(count: &mut i32) {
     }
 }
 
-fn basic_motions(mouse: &Mouse, mouse_pos: &mut Point, delta_time: &f64, count: &mut i32) {
+fn basic_motions(mouse: &Mouse, mouse_pos: &mut Vec2<f64>, delta_time: &f64, count: &mut i32) {
     let speed = 150.0 * *count as f64;
-    let distance = (speed * delta_time) as i32;
+    let distance = speed * delta_time;
     if Keycode::H.is_pressed() {
-        mouse.move_to(mouse_pos.x - distance, mouse_pos.y).unwrap();
+        mouse
+            .move_to(mouse_pos.x as i32 - distance as i32, mouse_pos.y as i32)
+            .unwrap();
         mouse_pos.x -= distance;
     }
     if Keycode::L.is_pressed() {
-        mouse.move_to(mouse_pos.x + distance, mouse_pos.y).unwrap();
+        mouse
+            .move_to(mouse_pos.x as i32 + distance as i32, mouse_pos.y as i32)
+            .unwrap();
         mouse_pos.x += distance;
     }
     if Keycode::J.is_pressed() {
-        mouse.move_to(mouse_pos.x, mouse_pos.y + distance).unwrap();
+        mouse
+            .move_to(mouse_pos.x as i32, mouse_pos.y as i32 + distance as i32)
+            .unwrap();
         mouse_pos.y += distance;
     }
     if Keycode::K.is_pressed() {
-        mouse.move_to(mouse_pos.x, mouse_pos.y - distance).unwrap();
+        mouse
+            .move_to(mouse_pos.x as i32, mouse_pos.y as i32 - distance as i32)
+            .unwrap();
         mouse_pos.y -= distance;
     }
 }
@@ -92,6 +103,12 @@ fn main() {
     let mut right_pressed = false;
     let mut left_pressed = false;
 
+    let mouse_pos = mouse.get_position().unwrap();
+    let mut mouse_pos: Vec2<f64> = Vec2 {
+        x: mouse_pos.x as f64,
+        y: mouse_pos.y as f64,
+    };
+
     loop {
         std::thread::sleep(std::time::Duration::from_millis(1));
 
@@ -107,10 +124,11 @@ fn main() {
             motions_on = false;
         }
 
-        let mut mouse_pos = mouse.get_position().unwrap();
         set_count(&mut count);
         basic_motions(&mouse, &mut mouse_pos, &delta_time, &mut count);
         mouse_clicks(&mouse, &mut left_pressed, &mut right_pressed);
+
+        println!("{:?}", mouse_pos);
 
         let now = std::time::Instant::now();
         delta_time = (now - last_tick).as_secs_f64();
