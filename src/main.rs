@@ -86,7 +86,7 @@ fn main() {
     let mut motions_on = true;
 
     let mouse = Mouse::new();
-    let mut count = 0;
+    let mut count = 6;
     let mut delta_time = 0.0;
     let mut last_tick = std::time::Instant::now();
     let mut right_pressed = false;
