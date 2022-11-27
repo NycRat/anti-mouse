@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 mouse-rs = "0.4"
 readkey = "0.2.1"
+winit = "0.27.5"

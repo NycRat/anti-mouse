@@ -1,6 +1,12 @@
 use crate::vec2::Vec2;
 use mouse_rs::Mouse;
 use readkey::Keycode;
+use winit::{
+    dpi::LogicalSize,
+    event::{Event, WindowEvent},
+    event_loop::{ControlFlow, EventLoop},
+    window::WindowBuilder,
+};
 
 pub mod vec2;
 
@@ -94,8 +100,6 @@ fn mouse_clicks(mouse: &Mouse, left_pressed: &mut bool, right_pressed: &mut bool
 }
 
 fn main() {
-    let mut motions_on = true;
-
     let mouse = Mouse::new();
     let mut count = 6;
     let mut delta_time = 0.0;
@@ -109,19 +113,18 @@ fn main() {
         y: mouse_pos.y as f64,
     };
 
-    loop {
+    let event_loop = EventLoop::new();
+    let window = WindowBuilder::new()
+        .with_inner_size(LogicalSize::new(0.0, 0.0))
+        .build(&event_loop)
+        .unwrap();
+
+    event_loop.run(move |event, _, control_flow| {
+        *control_flow = ControlFlow::Poll;
         std::thread::sleep(std::time::Duration::from_millis(1));
 
         if Keycode::Escape.is_pressed() {
-            motions_on = true;
-        }
-
-        if !motions_on {
-            continue;
-        }
-
-        if Keycode::I.is_pressed() {
-            motions_on = false;
+            window.focus_window();
         }
 
         set_count(&mut count);
@@ -132,5 +135,13 @@ fn main() {
         delta_time = (now - last_tick).as_secs_f64();
 
         last_tick = now;
-    }
+
+        match event {
+            Event::WindowEvent {
+                event: WindowEvent::CloseRequested,
+                window_id,
+            } if window_id == window.id() => *control_flow = ControlFlow::Exit,
+            _ => (),
+        }
+    });
 }
