@@ -86,17 +86,15 @@ fn mouse_clicks(mouse: &Mouse, left_pressed: &mut bool, right_pressed: &mut bool
         key_pressed = left_pressed;
         key = Keys::LEFT;
     }
-    if Keycode::Space.is_pressed() {
+
+    let space_pressed = Keycode::Space.is_pressed();
+    if space_pressed {
         if !*key_pressed {
-            mouse.press(&key).unwrap();
-            *key_pressed = true;
-        }
-    } else {
-        if *key_pressed {
-            mouse.release(&key).unwrap();
-            *key_pressed = false;
+            mouse.click(&key).unwrap();
+            mouse.click(&key).unwrap();
         }
     }
+    *key_pressed = space_pressed;
 }
 
 fn main() {
@@ -108,6 +106,7 @@ fn main() {
     let mut last_tick = std::time::Instant::now();
     let mut right_pressed = false;
     let mut left_pressed = false;
+    let mut i_pressed = false;
 
     let mouse_pos = mouse.get_position().unwrap();
     let mut mouse_pos: Vec2<f64> = Vec2 {
@@ -131,18 +130,26 @@ fn main() {
         }
 
         if motions_on {
-            // if Keycode::I.is_pressed() {
-            //     // unfocus window?
-            // }
+            if Keycode::I.is_pressed() {
+                // unfocus window
+                if !i_pressed {
+                    use mouse_rs::types::keys::Keys;
+                    mouse.click(&Keys::LEFT).unwrap();
+                    motions_on = false;
+                    i_pressed = true;
+                }
+            } else {
+                i_pressed = false;
+                set_count(&mut count);
+                basic_motions(&mouse, &mut mouse_pos, &delta_time, &mut count);
+                mouse_clicks(&mouse, &mut left_pressed, &mut right_pressed);
+                window.focus_window();
 
-            set_count(&mut count);
-            basic_motions(&mouse, &mut mouse_pos, &delta_time, &mut count);
-            mouse_clicks(&mouse, &mut left_pressed, &mut right_pressed);
+                let now = std::time::Instant::now();
+                delta_time = (now - last_tick).as_secs_f64();
 
-            let now = std::time::Instant::now();
-            delta_time = (now - last_tick).as_secs_f64();
-
-            last_tick = now;
+                last_tick = now;
+            }
         }
 
         match event {
