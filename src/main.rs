@@ -100,6 +100,8 @@ fn mouse_clicks(mouse: &Mouse, left_pressed: &mut bool, right_pressed: &mut bool
 }
 
 fn main() {
+    let mut motions_on = true;
+
     let mouse = Mouse::new();
     let mut count = 6;
     let mut delta_time = 0.0;
@@ -125,22 +127,35 @@ fn main() {
 
         if Keycode::Escape.is_pressed() {
             window.focus_window();
+            motions_on = true;
         }
 
-        set_count(&mut count);
-        basic_motions(&mouse, &mut mouse_pos, &delta_time, &mut count);
-        mouse_clicks(&mouse, &mut left_pressed, &mut right_pressed);
+        if motions_on {
+            // if Keycode::I.is_pressed() {
+            //     // unfocus window?
+            // }
 
-        let now = std::time::Instant::now();
-        delta_time = (now - last_tick).as_secs_f64();
+            set_count(&mut count);
+            basic_motions(&mouse, &mut mouse_pos, &delta_time, &mut count);
+            mouse_clicks(&mouse, &mut left_pressed, &mut right_pressed);
 
-        last_tick = now;
+            let now = std::time::Instant::now();
+            delta_time = (now - last_tick).as_secs_f64();
+
+            last_tick = now;
+        }
 
         match event {
             Event::WindowEvent {
                 event: WindowEvent::CloseRequested,
                 window_id,
             } if window_id == window.id() => *control_flow = ControlFlow::Exit,
+            Event::WindowEvent {
+                window_id: _,
+                event: WindowEvent::Focused(focused),
+            } => {
+                motions_on = focused;
+            }
             _ => (),
         }
     });
