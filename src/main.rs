@@ -1,5 +1,5 @@
 use crate::vec2::Vec2;
-use mouse_rs::Mouse;
+use mouse_rs::{types::keys::Keys, Mouse};
 use readkey::Keycode;
 use winit::{
     dpi::LogicalSize,
@@ -76,25 +76,27 @@ fn basic_motions(mouse: &Mouse, mouse_pos: &mut Vec2<f64>, delta_time: &f64, cou
 }
 
 fn mouse_clicks(mouse: &Mouse, left_pressed: &mut bool, right_pressed: &mut bool) {
-    use mouse_rs::types::keys::Keys;
-    let key_pressed;
-    let key;
+    let button_pressed;
+    let button;
     if Keycode::Shift.is_pressed() {
-        key_pressed = right_pressed;
-        key = Keys::RIGHT;
+        button_pressed = right_pressed;
+        button = Keys::RIGHT;
     } else {
-        key_pressed = left_pressed;
-        key = Keys::LEFT;
+        button_pressed = left_pressed;
+        button = Keys::LEFT;
     }
 
     let space_pressed = Keycode::Space.is_pressed();
     if space_pressed {
-        if !*key_pressed {
-            mouse.click(&key).unwrap();
-            mouse.click(&key).unwrap();
+        if !*button_pressed {
+            *button_pressed = true;
+            mouse.click(&button).unwrap();
+            std::thread::sleep(std::time::Duration::from_millis(100));
+            mouse.click(&button).unwrap();
         }
+    } else {
+        *button_pressed = false;
     }
-    *key_pressed = space_pressed;
 }
 
 fn main() {
@@ -133,7 +135,6 @@ fn main() {
             if Keycode::I.is_pressed() {
                 // unfocus window
                 if !i_pressed {
-                    use mouse_rs::types::keys::Keys;
                     mouse.click(&Keys::LEFT).unwrap();
                     motions_on = false;
                     i_pressed = true;
