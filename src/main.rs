@@ -18,32 +18,32 @@ fn set_count(count: &mut i32) {
         *count = 1;
     }
     if Keycode::_2.is_pressed() {
-        *count = 2;
-    }
-    if Keycode::_3.is_pressed() {
         *count = 3;
     }
-    if Keycode::_4.is_pressed() {
-        *count = 4;
-    }
-    if Keycode::_5.is_pressed() {
-        *count = 5;
-    }
-    if Keycode::_6.is_pressed() {
+    if Keycode::_3.is_pressed() {
         *count = 6;
     }
-    if Keycode::_7.is_pressed() {
-        *count = 7;
+    if Keycode::_4.is_pressed() {
+        *count = 10;
     }
-    if Keycode::_8.is_pressed() {
-        *count = 8;
-    }
-    if Keycode::_9.is_pressed() {
-        *count = 9;
-    }
-    if Keycode::_9.is_pressed() {
-        *count = 9;
-    }
+    // if Keycode::_5.is_pressed() {
+    //     *count = 5;
+    // }
+    // if Keycode::_6.is_pressed() {
+    //     *count = 6;
+    // }
+    // if Keycode::_7.is_pressed() {
+    //     *count = 7;
+    // }
+    // if Keycode::_8.is_pressed() {
+    //     *count = 8;
+    // }
+    // if Keycode::_9.is_pressed() {
+    //     *count = 9;
+    // }
+    // if Keycode::_9.is_pressed() {
+    //     *count = 9;
+    // }
 }
 
 fn basic_motions(mouse: &Mouse, mouse_pos: &mut Vec2<f64>, delta_time: &f64, count: &mut i32) {
