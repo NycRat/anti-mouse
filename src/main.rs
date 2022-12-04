@@ -73,6 +73,21 @@ fn basic_motions(mouse: &Mouse, mouse_pos: &mut Vec2<f64>, delta_time: &f64, cou
             .unwrap();
         mouse_pos.y -= distance;
     }
+
+    // check if mouse_pos goes off screen
+    let real_mouse_pos = mouse.get_position().unwrap();
+    if mouse_pos.x as i32 > real_mouse_pos.x + 1 {
+        mouse_pos.x = real_mouse_pos.x as f64;
+    }
+    if mouse_pos.y as i32 > real_mouse_pos.y + 1 {
+        mouse_pos.y = real_mouse_pos.y as f64;
+    }
+    if (mouse_pos.x as i32) < real_mouse_pos.x - 1 {
+        mouse_pos.x = real_mouse_pos.x as f64;
+    }
+    if (mouse_pos.y as i32) < real_mouse_pos.y - 1 {
+        mouse_pos.y = real_mouse_pos.y as f64;
+    }
 }
 
 fn mouse_clicks(mouse: &Mouse, left_pressed: &mut bool, right_pressed: &mut bool) {
