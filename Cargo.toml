@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 mouse-rs = "0.4"
-readkey = "0.2.1"
 winit = "0.27.5"
+device_query = "1.1.1"
