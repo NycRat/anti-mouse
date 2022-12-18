@@ -9,11 +9,6 @@ Currently working on vim motions, but other keybinds will be supported.
 Note: This project is VERY early in development, more improvements will be added
 to make the application more practical to use.
 
-## Support
-
-Currently only supports MacOS, but should support Linux and Windows in the near
-future. Again, this project is very early in development.
-
 ## Usage
 
 ### Motions
