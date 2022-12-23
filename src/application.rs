@@ -1,7 +1,7 @@
 use crate::vec2::Vec2;
 use std::time::Instant;
 
-use device_query::{DeviceState, DeviceQuery, Keycode};
+use device_query::{DeviceQuery, DeviceState, Keycode};
 use mouse_rs::{types::keys::Keys, Mouse};
 use winit::{
     dpi::LogicalSize,
@@ -55,8 +55,6 @@ impl Application {
 
             let pressed_keys = device_state.get_keys();
 
-            if pressed_keys.contains(&Keycode::Escape) {
-            }
             if pressed_keys.contains(&Keycode::Escape) {
                 window.focus_window();
                 self.motions_on = true;
