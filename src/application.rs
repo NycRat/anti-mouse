@@ -1,4 +1,4 @@
-use crate::vec2::Vec2;
+use crate::{config::Config, vec2::Vec2};
 use std::time::Instant;
 
 use device_query::{DeviceQuery, DeviceState, Keycode};
@@ -20,6 +20,7 @@ pub struct Application {
     left_pressed: bool,
     i_pressed: bool,
     mouse_pos: Vec2<f64>,
+    config: Config,
 }
 
 impl Application {
@@ -39,6 +40,7 @@ impl Application {
                 x: mouse_pos.x as f64,
                 y: mouse_pos.y as f64,
             },
+            config: Config::from_config_file("./config.json"),
         };
     }
 
@@ -55,13 +57,13 @@ impl Application {
 
             let pressed_keys = device_state.get_keys();
 
-            if pressed_keys.contains(&Keycode::Escape) {
+            if pressed_keys.contains(&self.config.keybinds.get("motions_on_key").unwrap()) {
                 window.focus_window();
                 self.motions_on = true;
             }
 
             if self.motions_on {
-                if pressed_keys.contains(&Keycode::I) {
+                if pressed_keys.contains(&self.config.keybinds.get("motions_off_key").unwrap()) {
                     // unfocus window
                     if !self.i_pressed {
                         self.mouse.click(&Keys::LEFT).unwrap();
