@@ -1,0 +1,17 @@
+{
+  "motions_on_key": "Escape",
+  "motions_off_key": "I",
+  "up": "K",
+  "down": "J",
+  "left": "H",
+  "right": "L",
+  "count_0": "Key0",
+  "count_1": "Key1",
+  "count_2": "Key2",
+  "count_3": "Key3",
+  "count_4": "Key4",
+  "scroll_up": "Y",
+  "scroll_down": "E",
+  "click": "Space",
+  "right_click_modifier": "LShift"
+}
