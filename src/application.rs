@@ -75,6 +75,7 @@ impl Application {
                     Self::handle_set_count(&mut self, &pressed_keys);
                     self.handle_basic_motions(&pressed_keys);
                     self.handle_mouse_clicks(&pressed_keys);
+                    self.handle_scrolling(&pressed_keys);
                     window.focus_window();
 
                     let now = std::time::Instant::now();
@@ -173,6 +174,7 @@ impl Application {
             self.mouse_pos.y = real_mouse_pos.y as f64;
         }
     }
+
     fn handle_mouse_clicks(&mut self, pressed_keys: &Vec<Keycode>) {
         let button_pressed;
         let button;
@@ -194,6 +196,17 @@ impl Application {
             }
         } else {
             *button_pressed = false;
+        }
+    }
+
+    fn handle_scrolling(&mut self, pressed_keys: &Vec<Keycode>) {
+        if pressed_keys.contains(&Keycode::E) {
+            // Could be self.count but I think 1 is plenty
+            self.mouse.wheel(1).unwrap();
+        }
+        if pressed_keys.contains(&Keycode::Y) {
+            // Could be self.count but I think -1 is plenty
+            self.mouse.wheel(-1).unwrap();
         }
     }
 }
