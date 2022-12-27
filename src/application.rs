@@ -57,13 +57,13 @@ impl Application {
 
             let pressed_keys = device_state.get_keys();
 
-            if pressed_keys.contains(&self.config.keybinds.get("motions_on_key").unwrap()) {
+            if pressed_keys.contains(&self.config.keybinds["motions_on_key"]) {
                 window.focus_window();
                 self.motions_on = true;
             }
 
             if self.motions_on {
-                if pressed_keys.contains(&self.config.keybinds.get("motions_off_key").unwrap()) {
+                if pressed_keys.contains(&self.config.keybinds["motions_off_key"]) {
                     // unfocus window
                     if !self.i_pressed {
                         self.mouse.click(&Keys::LEFT).unwrap();
@@ -102,19 +102,19 @@ impl Application {
     }
 
     fn handle_set_count(&mut self, pressed_keys: &Vec<Keycode>) {
-        if pressed_keys.contains(&Keycode::Key0) {
+        if pressed_keys.contains(&self.config.keybinds["count_0"]) {
             self.count = 0;
         }
-        if pressed_keys.contains(&Keycode::Key1) {
-            self.count = 1;
+        if pressed_keys.contains(&self.config.keybinds["count_1"]) {
+            self.count = 2;
         }
-        if pressed_keys.contains(&Keycode::Key2) {
+        if pressed_keys.contains(&self.config.keybinds["count_2"]) {
             self.count = 3;
         }
-        if pressed_keys.contains(&Keycode::Key3) {
+        if pressed_keys.contains(&self.config.keybinds["count_3"]) {
             self.count = 6;
         }
-        if pressed_keys.contains(&Keycode::Key4) {
+        if pressed_keys.contains(&self.config.keybinds["count_4"]) {
             self.count = 10;
         }
     }
@@ -122,7 +122,7 @@ impl Application {
     fn handle_basic_motions(&mut self, pressed_keys: &Vec<Keycode>) {
         let speed = 150.0 * self.count as f64;
         let distance = speed * self.delta_time;
-        if pressed_keys.contains(&Keycode::H) {
+        if pressed_keys.contains(&self.config.keybinds["left"]) {
             self.mouse
                 .move_to(
                     self.mouse_pos.x as i32 - distance as i32,
@@ -131,7 +131,7 @@ impl Application {
                 .unwrap();
             self.mouse_pos.x -= distance;
         }
-        if pressed_keys.contains(&Keycode::L) {
+        if pressed_keys.contains(&self.config.keybinds["right"]) {
             self.mouse
                 .move_to(
                     self.mouse_pos.x as i32 + distance as i32,
@@ -140,7 +140,7 @@ impl Application {
                 .unwrap();
             self.mouse_pos.x += distance;
         }
-        if pressed_keys.contains(&Keycode::J) {
+        if pressed_keys.contains(&self.config.keybinds["down"]) {
             self.mouse
                 .move_to(
                     self.mouse_pos.x as i32,
@@ -149,7 +149,7 @@ impl Application {
                 .unwrap();
             self.mouse_pos.y += distance;
         }
-        if pressed_keys.contains(&Keycode::K) {
+        if pressed_keys.contains(&self.config.keybinds["up"]) {
             self.mouse
                 .move_to(
                     self.mouse_pos.x as i32,
@@ -178,7 +178,7 @@ impl Application {
     fn handle_mouse_clicks(&mut self, pressed_keys: &Vec<Keycode>) {
         let button_pressed;
         let button;
-        if pressed_keys.contains(&Keycode::LShift) {
+        if pressed_keys.contains(&self.config.keybinds["right_click_modifier"]) {
             button_pressed = &mut self.right_pressed;
             button = Keys::RIGHT;
         } else {
@@ -186,7 +186,7 @@ impl Application {
             button = Keys::LEFT;
         }
 
-        let space_pressed = pressed_keys.contains(&Keycode::Space);
+        let space_pressed = pressed_keys.contains(&self.config.keybinds["click"]);
         if space_pressed {
             if !*button_pressed {
                 *button_pressed = true;
@@ -200,11 +200,11 @@ impl Application {
     }
 
     fn handle_scrolling(&mut self, pressed_keys: &Vec<Keycode>) {
-        if pressed_keys.contains(&Keycode::Y) {
+        if pressed_keys.contains(&self.config.keybinds["scroll_up"]) {
             // Could be self.count but I think 1 is plenty
             self.mouse.wheel(1).unwrap();
         }
-        if pressed_keys.contains(&Keycode::E) {
+        if pressed_keys.contains(&self.config.keybinds["scroll_down"]) {
             // Could be self.count but I think -1 is plenty
             self.mouse.wheel(-1).unwrap();
         }

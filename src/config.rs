@@ -9,9 +9,27 @@ pub struct Config {
 
 impl Config {
     pub fn get_default_config() -> Self {
-        let mut keybinds = HashMap::new();
-        keybinds.insert("motions_on_key".to_owned(), Keycode::Escape);
-        keybinds.insert("motions_off_key".to_owned(), Keycode::I);
+        let keybinds: HashMap<String, Keycode> = [
+            ("motions_on_key", Keycode::Escape),
+            ("motions_off_key", Keycode::I),
+            ("up", Keycode::K),
+            ("down", Keycode::J),
+            ("left", Keycode::H),
+            ("right", Keycode::L),
+            ("count_0", Keycode::Key0),
+            ("count_1", Keycode::Key1),
+            ("count_2", Keycode::Key2),
+            ("count_3", Keycode::Key3),
+            ("count_4", Keycode::Key4),
+            ("scroll_up", Keycode::Y),
+            ("scroll_down", Keycode::E),
+            ("click", Keycode::Space),
+            ("right_click_modifier", Keycode::LShift),
+        ]
+        .iter()
+        .map(|(lhs, rhs)| (String::from(*lhs), *rhs))
+        .collect();
+
         Config { keybinds }
     }
 
@@ -25,14 +43,20 @@ impl Config {
                     .iter()
                     .map(|(lhs, rhs)| {
                         if config_json[lhs].is_string() {
-                            match Keycode::from_str(config_json[lhs].as_str().unwrap_or_default()) {
+                            let new_rhs = config_json[lhs].as_str().unwrap_or_default();
+                            match Keycode::from_str(new_rhs) {
                                 Ok(key) => {
-                                    // println!("Set {} to {}", lhs, key);
+                                    println!("Set {} to {}", lhs, key);
 
                                     return (lhs.clone(), key);
                                 }
                                 Err(err) => {
-                                    println!("{:?}", err);
+                                    // device_query from_str is missing Key0
+                                    if new_rhs == "Key0" {
+                                        return (lhs.clone(), Keycode::Key0);
+                                    } else {
+                                        println!("{}: {:?}", new_rhs, err);
+                                    }
                                 }
                             }
                         }
