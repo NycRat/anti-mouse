@@ -200,11 +200,11 @@ impl Application {
     }
 
     fn handle_scrolling(&mut self, pressed_keys: &Vec<Keycode>) {
-        if pressed_keys.contains(&Keycode::E) {
+        if pressed_keys.contains(&Keycode::Y) {
             // Could be self.count but I think 1 is plenty
             self.mouse.wheel(1).unwrap();
         }
-        if pressed_keys.contains(&Keycode::Y) {
+        if pressed_keys.contains(&Keycode::E) {
             // Could be self.count but I think -1 is plenty
             self.mouse.wheel(-1).unwrap();
         }
