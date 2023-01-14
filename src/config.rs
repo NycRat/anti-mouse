@@ -51,12 +51,7 @@ impl Config {
                                     return (lhs.clone(), key);
                                 }
                                 Err(err) => {
-                                    // device_query from_str is missing Key0
-                                    if new_rhs == "Key0" {
-                                        return (lhs.clone(), Keycode::Key0);
-                                    } else {
-                                        println!("{}: {:?}", new_rhs, err);
-                                    }
+                                    println!("{}: {:?}", new_rhs, err);
                                 }
                             }
                         }
