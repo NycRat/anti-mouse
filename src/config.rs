@@ -10,6 +10,8 @@ pub struct Config {
 impl Config {
     pub fn get_default_config() -> Self {
         let keybinds: HashMap<String, Keycode> = [
+            ("toggle_key", Keycode::BackSlash),
+            ("toggle_key_modifier", Keycode::Meta),
             ("motions_on_key", Keycode::Escape),
             ("motions_off_key", Keycode::I),
             ("up", Keycode::K),

@@ -1,4 +1,6 @@
 {
+  "toggle_key": "BackSlash",
+  "toggle_key_modifier": "Meta",
   "motions_on_key": "Escape",
   "motions_off_key": "I",
   "up": "K",

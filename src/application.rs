@@ -11,6 +11,7 @@ use winit::{
 };
 
 pub struct Application {
+    application_on: bool,
     motions_on: bool,
     mouse: Mouse,
     count: i32,
@@ -28,6 +29,7 @@ impl Application {
         let mouse = Mouse::new();
         let mouse_pos = mouse.get_position().unwrap();
         return Application {
+            application_on: true,
             motions_on: true,
             mouse,
             count: 6,
@@ -51,37 +53,53 @@ impl Application {
             .with_inner_size(LogicalSize::new(0.0, 0.0))
             .build(&event_loop)
             .unwrap();
+
+        let mut toggle_key_pressed = false;
+
         event_loop.run(move |event, _, control_flow| {
             *control_flow = ControlFlow::Poll;
             std::thread::sleep(std::time::Duration::from_millis(1));
 
             let pressed_keys = device_state.get_keys();
 
-            if pressed_keys.contains(&self.config.keybinds["motions_on_key"]) {
-                window.focus_window();
-                self.motions_on = true;
+            if pressed_keys.contains(&self.config.keybinds["toggle_key_modifier"])
+                && pressed_keys.contains(&self.config.keybinds["toggle_key"])
+            {
+                if !toggle_key_pressed {
+                    self.application_on = !self.application_on;
+                    toggle_key_pressed = true;
+                }
+            } else {
+                toggle_key_pressed = false;
             }
 
-            if self.motions_on {
-                if pressed_keys.contains(&self.config.keybinds["motions_off_key"]) {
-                    // unfocus window
-                    if !self.i_pressed {
-                        self.mouse.click(&Keys::LEFT).unwrap();
-                        self.motions_on = false;
-                        self.i_pressed = true;
-                    }
-                } else {
-                    self.i_pressed = false;
-                    Self::handle_set_count(&mut self, &pressed_keys);
-                    self.handle_basic_motions(&pressed_keys);
-                    self.handle_mouse_clicks(&pressed_keys);
-                    self.handle_scrolling(&pressed_keys);
+            if self.application_on {
+                if pressed_keys.contains(&self.config.keybinds["motions_on_key"]) {
                     window.focus_window();
+                    self.motions_on = true;
+                }
 
-                    let now = std::time::Instant::now();
-                    self.delta_time = (now - self.last_tick).as_secs_f64();
+                if self.motions_on {
+                    if pressed_keys.contains(&self.config.keybinds["motions_off_key"]) {
+                        // unfocus window
+                        if !self.i_pressed {
+                            self.mouse.click(&Keys::LEFT).unwrap();
+                            self.motions_on = false;
+                            self.i_pressed = true;
+                        }
+                    } else {
+                        self.i_pressed = false;
+                        self.handle_set_count(&pressed_keys);
+                        self.handle_basic_motions(&pressed_keys);
+                        self.handle_mouse_clicks(&pressed_keys);
+                        self.handle_scrolling(&pressed_keys);
+                        window.focus_window();
 
-                    self.last_tick = now;
+                        let now = std::time::Instant::now();
+                        self.delta_time = (now - self.last_tick).as_secs_f64();
+
+                        self.last_tick = now;
+                    }
                 }
             }
 
